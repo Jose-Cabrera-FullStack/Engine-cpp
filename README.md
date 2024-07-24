@@ -2,6 +2,21 @@
 
 Welcome to the project! This guide is designed to help you set up the project on a Windows 11 system using Visual Studio Code (VS Code) as smoothly as possible. Follow these steps to get started.
 
+## Running the Project
+
+To run the project, you need to compile the source code using a C++ compiler and the SDL2 library. You can compile the project using the following command:
+
+```bash
+g++ src/Main.cpp -o src/output/Main $(sdl2-config --cflags --libs)
+
+./gameengine;
+
+# or using make
+
+make build
+make run
+```
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
