@@ -34,6 +34,14 @@ Before you begin, ensure you have the following installed on your system:
    - Add a new entry pointing to the `lib\x64` directory inside your SDL2 folder, e.g., `C:\libs\SDL2\lib\x64`.
    - Click `OK` to close all dialogues.
 
+### Install dependencies using
+
+To install the dependencies, run the following command in the in MSYS2 terminal:
+
+```bash
+pacman -S mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-lua
+```
+
 ## Setting Up the Project in VS Code
 
 1. **Clone the Repository**: Open VS Code, launch the Terminal (`Ctrl+``), and clone the project repository by running:
