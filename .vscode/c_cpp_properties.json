@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include/SDL2",
-                "${workspaceFolder}/lib/**"
+                "C:/msys64/mingw64/include/**",
             ],
             "defines": [
                 "_DEBUG",
