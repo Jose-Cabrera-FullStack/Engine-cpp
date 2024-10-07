@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Ending main" << std::endl; // Línea de prueba
+    std::cout << "Prueba main" << std::endl; // Línea de prueba
 
     Game game;
 

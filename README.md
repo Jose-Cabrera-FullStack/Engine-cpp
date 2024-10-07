@@ -42,6 +42,8 @@ To install the dependencies, run the following command in the in MSYS2 terminal:
 pacman -S mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-lua
 ```
 
+Note: You may have to configure the IDE to use the correct compiler and linker flags (MSYS2).
+
 ## Setting Up the Project in VS Code
 
 1. **Clone the Repository**: Open VS Code, launch the Terminal (`Ctrl+``), and clone the project repository by running:
@@ -83,7 +85,11 @@ pacman -S mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL2_
 5. **Build and Run**: Open the main.cpp file in the src folder, and press `Ctrl+Shift+B` to build the project. You can then run the compiled executable from the terminal.
 
 ```bash
-g++ src/Main.cpp -o src/output/Main $(sdl2-config --cflags --libs)
+mkdir build
+cd build
+cmake ..
+make
+./gameengine
 ```
 
 ## Troubleshooting
