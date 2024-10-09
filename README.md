@@ -6,15 +6,14 @@ Welcome to the project! This guide is designed to help you set up the project on
 
 To run the project, you need to compile the source code using a C++ compiler and the SDL2 library. You can compile the project using the following command:
 
+**Build and Run**: Open the main.cpp file in the src folder, and press `Ctrl+Shift+B` to build the project. You can then run the compiled executable from the terminal.
+
 ```bash
-g++ src/Main.cpp -o src/output/Main $(sdl2-config --cflags --libs)
-
-./gameengine;
-
-# or using make
-
-make build
-make run
+mkdir build
+cd build
+cmake ..
+make
+./gameengine
 ```
 
 ## Prerequisites
@@ -82,15 +81,7 @@ Note: You may have to configure the IDE to use the correct compiler and linker f
     }
     ```
     - Replace "compilerPath" with the path to your compiler executable, e.g., the path to cl.exe for MSVC.
-5. **Build and Run**: Open the main.cpp file in the src folder, and press `Ctrl+Shift+B` to build the project. You can then run the compiled executable from the terminal.
 
-```bash
-mkdir build
-cd build
-cmake ..
-make
-./gameengine
-```
 
 ## Troubleshooting
 
