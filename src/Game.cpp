@@ -2,6 +2,11 @@
 #include <SDL.h>
 #include <iostream>
 
+void Game::Setup()
+{
+    std::cout << "Setup" << std::endl;
+}
+
 Game::Game()
 {
     isRunning = false;
@@ -21,12 +26,17 @@ void Game::Initialize()
         return;
     }
 
+    SDL_DisplayMode displayMode;
+    SDL_GetCurrentDisplayMode(0, &displayMode);
+    windowWidth = 800;
+    windowHeight = 600;
+
     window = SDL_CreateWindow(
         "Game Programming in C++ (Chapter 1)", // Window title
         SDL_WINDOWPOS_CENTERED,                // Window x position
         SDL_WINDOWPOS_CENTERED,                // Window y position
-        800,                                   // Window width
-        600,                                   // Window height
+        windowWidth,                           // Window width
+        windowHeight,                          // Window height
         SDL_WINDOW_BORDERLESS                  // Window flag
     );
     if (!window)
@@ -42,11 +52,14 @@ void Game::Initialize()
         return;
     }
 
+    // SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Fullscreen
+
     isRunning = true;
 }
 
 void Game::Run()
 {
+    Setup();
     while (isRunning)
     {
         ProcessInput();
@@ -84,10 +97,12 @@ void Game::Update()
 
 void Game::Render()
 {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
-    // TODO: Render code here
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_Rect player = {10, 10, 20, 20};
+    SDL_RenderFillRect(renderer, &player);
 
     SDL_RenderPresent(renderer);
 }
