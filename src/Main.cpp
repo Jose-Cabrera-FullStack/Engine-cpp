@@ -4,8 +4,6 @@
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Prueba main" << std::endl; // Línea de prueba
-
     Game game;
 
     game.Initialize();

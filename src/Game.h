@@ -3,10 +3,14 @@
 
 #include <SDL.h>
 
+const int FPS = 30;
+const int MILISECONDS_PER_FRAME = 1000 / FPS;
+
 class Game
 {
 private:
     bool isRunning;
+    int millisecondsPreviousFrame = 0;
     SDL_Window *window;
     SDL_Renderer *renderer;
 
