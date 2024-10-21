@@ -17,7 +17,7 @@ find_package(Lua REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/glm)
 
 # Source files
-file(GLOB SRC_FILES src/*.cpp)
+file(GLOB SRC_FILES src/*.cpp src/Game/*.cpp src/Logger/*.cpp)
 
 # Add executable
 add_executable(gameengine ${SRC_FILES})
