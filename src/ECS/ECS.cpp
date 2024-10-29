@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "ECS.h"
 
 int Entity::GetId() const
@@ -7,9 +8,17 @@ int Entity::GetId() const
 
 void System::AddEntityToSystem(Entity entity)
 {
+    entities.push_back(entity);
 }
 void System::RemoveEntityFromSystem(Entity entity)
 {
+    entities.erase(
+        std::remove_if(
+            entities.begin(),
+            entities.end(),
+            [&entity](const Entity &other)
+            { return other == entity; }),
+        entities.end());
 }
 std::vector<Entity> System::GetSystemEntities() const
 {
