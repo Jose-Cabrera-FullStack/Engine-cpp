@@ -86,8 +86,87 @@ public:
     void RequireComponent();
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Pool
+//////////////////////////////////////////////////////////////////////////////////////////
+// A pool is just a vector (contiguous data) of objects of type T.
+//////////////////////////////////////////////////////////////////////////////////////////
+class IPool
+{
+public:
+    virtual ~IPool() = default;
+};
+
+template <typename T>
+class Pool : IPool
+{
+private:
+    std::vector<T> data;
+
+public:
+    virtual Pool(int size = 100) = {
+        data.resize(size);
+}
+
+~Pool() = default;
+
+bool isEmtpy() const
+{
+    return data.empty();
+}
+
+int GetSize() const
+{
+    return data.size();
+}
+
+void Resize(int size)
+{
+    data.resize(size);
+}
+
+void Clear()
+{
+    data.clear();
+}
+
+void Add(const T &component)
+{
+    data.push_back(component);
+}
+
+void Set(int index, const T &component)
+{
+    data[index] = component;
+}
+
+T &Get(int index)
+{
+    return static_cast<T &>(data[index]);
+};
+
+T &operator[](unsigned int index)
+{
+    return data[index];
+}
+}
+;
+//////////////////////////////////////////////////////////////////////////////////////////
+// Registry
+//////////////////////////////////////////////////////////////////////////////////////////
+// The registry manages the creation and destruction of entities, add systems,
+// and add components to entities.
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class Registry
 {
+private:
+    int numEntities = 0;
+
+    // Vector of component pools, each pool contains all the data for a certain component type.
+    // Vector index = component type id
+    // Pool index = entity id
+    std::vector<IPool *> componentPools;
 };
 
 template <typename TComponent>
