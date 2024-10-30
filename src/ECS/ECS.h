@@ -3,6 +3,9 @@
 
 #include <bitset>
 #include <vector>
+#include <unordered_map>
+#include <typeindex>
+#include <set>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -167,6 +170,23 @@ private:
     // Vector index = component type id
     // Pool index = entity id
     std::vector<IPool *> componentPools;
+
+    std::vector<Signature> entityComponentSignatures;
+
+    std::unordered_map<std::type_index, System *> systems;
+
+    // Set of entities that are flagged to be added or removed from the registry Update loop.
+    std::set<Entity> entitiesToBeAdded;
+    std::set<Entity> entitiesToBeRemoved;
+
+public:
+    Registry() = default;
+
+    void Update();
+
+    Entity CreateEntity();
+
+    void AddEntityToSystem(Entity entity);
 };
 
 template <typename TComponent>

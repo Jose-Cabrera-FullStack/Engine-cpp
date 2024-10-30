@@ -60,7 +60,8 @@
         "chrono": "cpp",
         "ratio": "cpp",
         "format": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "typeindex": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
