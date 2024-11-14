@@ -2,6 +2,8 @@
 #include "ECS.h"
 #include "../Logger/Logger.h"
 
+int IComponent::nextId = 0;
+
 int Entity::GetId() const
 {
     return id;
@@ -44,38 +46,23 @@ Entity Registry::CreateEntity()
     return entity;
 }
 
-template <typename T, typename... TAgrs>
-void Registry::AddComponent(Entity entity, TAgrs &&...args)
+void Registry::AddEntityToSystem(Entity entity)
 {
-    const auto componentId = Component<T>::GetId();
     const auto entityId = entity.GetId();
 
-    if (componentId >= componentPools.size())
+    const auto &entityComponentSignature = entityComponentSignatures[entityId];
+
+    for (auto &system : systems)
     {
-        componentPools.resize(componentId + 1, nullptr);
+        const auto &systemComponentSignature = system.second->GetComponentSignature();
+
+        bool isInterested = (entityComponentSignature & systemComponentSignature) == systemComponentSignature;
+
+        if (isInterested)
+        {
+            system.second->AddEntityToSystem(entity);
+        }
     }
-    if (!componentPools[componentId])
-    {
-        Pool<T> *newComponentPool = new Pool<T>();
-        componentPools[componentId] = newComponentPool;
-    }
-
-    // Get the component pool for the component type.
-    Pool<T> *componentPool = Pool<T>(componentPools[componentId]);
-
-    if (entityId >= componentPool->data.size())
-    {
-        componentPool->data.resize(entityId + 1);
-    }
-
-    // Create the component and add it to the pool, and forwad the arguments to the component constructor.
-    T newComponent(std::forward<TAgrs>(args)...);
-
-    // Add the component to the pool.
-    componentPool->Set(entityId, newComponent);
-
-    // Update the entity signature to include the new component.
-    entityComponentSignatures[entityId].set(componentId);
 }
 
 void Registry::Update()
