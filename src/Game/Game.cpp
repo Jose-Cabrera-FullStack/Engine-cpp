@@ -8,15 +8,10 @@
 glm::vec2 playerPosition;
 glm::vec2 playerVelocity;
 
-void Game::Setup()
-{
-    playerPosition = glm::vec2(10.0f, 20.0f);
-    playerVelocity = glm::vec2(10.0f, 5.0f);
-}
-
 Game::Game()
 {
     isRunning = false;
+    registry = new Registry();
     Logger::Log("Game constructor");
 }
 
@@ -96,6 +91,12 @@ void Game::ProcessInput()
             break;
         }
     }
+}
+
+void Game::Setup()
+{
+    Entity tank = registry->CreateEntity();
+    Entity truck = registry->CreateEntity();
 }
 
 void Game::Update()

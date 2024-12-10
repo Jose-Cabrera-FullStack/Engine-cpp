@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <set>
+#include <memory>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -107,53 +108,53 @@ private:
     std::vector<T> data;
 
 public:
-    virtual Pool(int size = 100) = {
+    Pool(int size = 100)
+    {
         data.resize(size);
-}
+    }
 
-~Pool() = default;
+    ~Pool() = default;
 
-bool isEmtpy() const
-{
-    return data.empty();
-}
+    bool isEmtpy() const
+    {
+        return data.empty();
+    }
 
-int GetSize() const
-{
-    return data.size();
-}
+    int GetSize() const
+    {
+        return data.size();
+    }
 
-void Resize(int size)
-{
-    data.resize(size);
-}
+    void Resize(int size)
+    {
+        data.resize(size);
+    }
 
-void Clear()
-{
-    data.clear();
-}
+    void Clear()
+    {
+        data.clear();
+    }
 
-void Add(const T &component)
-{
-    data.push_back(component);
-}
+    void Add(const T &component)
+    {
+        data.push_back(component);
+    }
 
-void Set(int index, const T &component)
-{
-    data[index] = component;
-}
+    void Set(int index, const T &component)
+    {
+        data[index] = component;
+    }
 
-T &Get(int index)
-{
-    return static_cast<T &>(data[index]);
+    T &Get(int index)
+    {
+        return static_cast<T &>(data[index]);
+    };
+
+    T &operator[](unsigned int index)
+    {
+        return data[index];
+    }
 };
-
-T &operator[](unsigned int index)
-{
-    return data[index];
-}
-}
-;
 //////////////////////////////////////////////////////////////////////////////////////////
 // Registry
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +165,7 @@ T &operator[](unsigned int index)
 class Registry
 {
 private:
-    int numEntities = 0;
+    std::size_t numEntities = 0;
 
     // Vector of component pools, each pool contains all the data for a certain component type.
     // Vector index = component type id
@@ -223,7 +224,7 @@ void System::RequireComponent()
 template <typename TSystem, typename... TArgs>
 void Registry::AddSystem(TArgs &&...args)
 {
-    TSystem *newSystem = new TSystem(std::foorward<TArgs>(args)...);
+    TSystem *newSystem = new TSystem(std::forward<TArgs>(args)...);
     systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
 }
 
