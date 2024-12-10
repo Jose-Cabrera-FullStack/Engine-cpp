@@ -34,7 +34,7 @@ const Signature &System::GetComponentSignature() const
 
 Entity Registry::CreateEntity()
 {
-    int entityId = numEntities;
+    std::size_t entityId = numEntities;
 
     entityId = numEntities++;
 

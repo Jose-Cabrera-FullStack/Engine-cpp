@@ -11,7 +11,7 @@ glm::vec2 playerVelocity;
 Game::Game()
 {
     isRunning = false;
-    registry = new Registry();
+    registry = std::make_unique<Registry>();
     Logger::Log("Game constructor");
 }
 
