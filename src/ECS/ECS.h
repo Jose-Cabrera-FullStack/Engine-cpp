@@ -66,6 +66,17 @@ public:
     {
         return id > other.id;
     }
+
+    template <typename TComponent, typename... TArgs>
+    void AddComponent(TArgs &&...args);
+    template <typename TComponent>
+    void RemoveComponent();
+    template <typename TComponent>
+    bool HasComponent() const;
+    template <typename TComponent>
+    TComponent &GetComponent() const;
+
+    class Registry *registry;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +210,8 @@ public:
     void RemoveComponent(Entity entity);
     template <typename TComponent>
     bool HasComponent(Entity entity) const;
+    template <typename TComponent>
+    TComponent &GetComponent(Entity entity) const;
 
     // System management
     template <typename TSystem, typename... TArgs>
@@ -212,9 +225,6 @@ public:
 
     // Check the component signature of an entity.
     void AddEntityToSystem(Entity entity);
-
-    template <typename TComponent>
-    TComponent &GetComponent(Entity entity) const;
 };
 
 template <typename TComponent>
@@ -288,7 +298,7 @@ void Registry::AddComponent(Entity entity, TArgs &&...args)
     Logger::Log("Component id =" + std::to_string(componentId) + " added to entity id =" + std::to_string(entityId));
 }
 
-template <typename T>
+template <typename TComponent>
 void Registry::RemoveComponent(Entity entity)
 {
     const auto componentId = Component<T>::GetId();
@@ -297,13 +307,48 @@ void Registry::RemoveComponent(Entity entity)
     entityComponentSignatures[entityId].set(componentId, false);
 }
 
-template <typename T>
+template <typename TComponent>
 bool Registry::HasComponent(Entity entity) const
 {
     const auto componentId = Component<T>::GetId();
     const auto entityId = entity.GetId();
 
     return entityComponentSignatures[entityId].test(componentId);
+}
+
+template <typename TComponent>
+TComponent &Registry::GetComponent(Entity entity) const
+{
+    const auto componentId = Component<T>::GetId();
+    const auto entityId = entity.GetId();
+
+    std::shared_ptr<Pool<T>> componentPool = std::static_pointer_cast<Pool<T>>(componentPools[componentId]);
+
+    return componentPool->Get(entityId);
+}
+
+template <typename TComponent, typename... TArgs>
+void Entity::AddComponent(TArgs &&...args)
+{
+    // TODO: Implement
+}
+
+template <typename TComponent>
+void Entity::RemoveComponent()
+{
+    // TODO: Implement
+}
+
+template <typename TComponent>
+bool Entity::HasComponent() const
+{
+    // TODO: Implement
+}
+
+template <typename TComponent>
+TComponent &Entity::GetComponent() const
+{
+    // TODO: Implement
 }
 
 #endif
