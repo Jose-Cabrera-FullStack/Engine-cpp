@@ -28,7 +28,8 @@ protected:
 template <typename TComponent>
 class Component : public IComponent
 {
-    static int GetId()
+public:
+    static std::size_t GetId()
     {
         static int id = nextId++;
         return id;
@@ -103,7 +104,7 @@ public:
 };
 
 template <typename T>
-class Pool : IPool
+class Pool : public IPool
 {
 private:
     std::vector<T> data;
@@ -283,6 +284,8 @@ void Registry::AddComponent(Entity entity, TArgs &&...args)
     componentPool->Set(entityId, newComponent);
 
     entityComponentSignatures[entityId].set(componentId);
+
+    Logger::Log("Component id =" + std::to_string(componentId) + " added to entity id =" + std::to_string(entityId));
 }
 
 template <typename T>
