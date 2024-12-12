@@ -14,15 +14,15 @@ public:
         RequireComponent<RigidBodyComponent>();
     }
 
-    void Update()
+    void Update(double deltaTime)
     {
         for (auto entity : GetSystemEntities())
         {
             auto &transform = entity.GetComponent<TransformComponent>();
             const auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
-            transform.position.x += rigidBody.velocity.x;
-            transform.position.y += rigidBody.velocity.y;
+            transform.position.x += rigidBody.velocity.x * deltaTime;
+            transform.position.y += rigidBody.velocity.y * deltaTime;
 
             Logger::Log(
                 "Entity id =" +

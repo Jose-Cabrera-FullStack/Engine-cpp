@@ -121,7 +121,7 @@ void Game::Update()
     millisecondsPreviousFrame = SDL_GetTicks();
 
     // Ask all the systems to update
-    registry->GetSystem<MovementSystem>().Update();
+    registry->GetSystem<MovementSystem>().Update(deltaTime);
 
     // Update the registry to process the entities thar are waiting to be created or destroyed
     registry->Update();
