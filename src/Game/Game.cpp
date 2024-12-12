@@ -2,7 +2,9 @@
 #include "../Logger/Logger.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Components/SpriteComponent.h"
 #include "../Systems/MovementSystem.h"
+#include "../Systems/RenderSystem.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm.hpp>
@@ -100,11 +102,17 @@ void Game::Setup()
 {
     // Add the system that need to be proccessed in the game loop
     registry->AddSystem<MovementSystem>();
+    registry->AddSystem<RenderSystem>();
 
     Entity tank = registry->CreateEntity();
-
     tank.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(1.0, 1.0), 0.0);
     tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 10.0));
+    tank.AddComponent<SpriteComponent>(10, 10);
+
+    Entity truck = registry->CreateEntity();
+    truck.AddComponent<TransformComponent>(glm::vec2(100.0, 10.0), glm::vec2(10.0, 10.0), 0.0);
+    truck.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 10.0));
+    truck.AddComponent<SpriteComponent>(100, 100);
 }
 
 void Game::Update()
@@ -120,11 +128,11 @@ void Game::Update()
 
     millisecondsPreviousFrame = SDL_GetTicks();
 
-    // Ask all the systems to update
-    registry->GetSystem<MovementSystem>().Update(deltaTime);
-
     // Update the registry to process the entities thar are waiting to be created or destroyed
     registry->Update();
+
+    // Invoke the systems that need to update
+    registry->GetSystem<MovementSystem>().Update(deltaTime);
 }
 
 void Game::Render()
@@ -132,17 +140,8 @@ void Game::Render()
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
-    SDL_Surface *surface = IMG_Load("../assets/images/tank-tiger-right.png");
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-
-    SDL_Rect dstRect = {
-        static_cast<int>(playerPosition.x),
-        static_cast<int>(playerPosition.x),
-        32,
-        32};
-    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-    SDL_DestroyTexture(texture);
+    // Invoke the systems that need to render
+    registry->GetSystem<RenderSystem>().Update(renderer);
 
     SDL_RenderPresent(renderer);
 }
