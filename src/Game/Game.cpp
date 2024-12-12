@@ -2,6 +2,7 @@
 #include "../Logger/Logger.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Systems/MovementSystem.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm.hpp>
@@ -97,11 +98,13 @@ void Game::ProcessInput()
 
 void Game::Setup()
 {
+    // Add the system that need to be proccessed in the game loop
+    registry->AddSystem<MovementSystem>();
+
     Entity tank = registry->CreateEntity();
 
     tank.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(1.0, 1.0), 0.0);
     tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 10.0));
-    tank.RemoveComponent<TransformComponent>();
 }
 
 void Game::Update()
@@ -117,8 +120,11 @@ void Game::Update()
 
     millisecondsPreviousFrame = SDL_GetTicks();
 
-    playerPosition.x += playerVelocity.x * deltaTime;
-    playerPosition.y += playerVelocity.y * deltaTime;
+    // Ask all the systems to update
+    registry->GetSystem<MovementSystem>().Update();
+
+    // Update the registry to process the entities thar are waiting to be created or destroyed
+    registry->Update();
 }
 
 void Game::Render()
