@@ -301,16 +301,17 @@ void Registry::AddComponent(Entity entity, TArgs &&...args)
 template <typename TComponent>
 void Registry::RemoveComponent(Entity entity)
 {
-    const auto componentId = Component<T>::GetId();
+    const auto componentId = Component<TComponent>::GetId();
     const auto entityId = entity.GetId();
 
     entityComponentSignatures[entityId].set(componentId, false);
+    Logger::Log("Component id =" + std::to_string(componentId) + " removed to entity id =" + std::to_string(entityId));
 }
 
 template <typename TComponent>
 bool Registry::HasComponent(Entity entity) const
 {
-    const auto componentId = Component<T>::GetId();
+    const auto componentId = Component<TComponent>::GetId();
     const auto entityId = entity.GetId();
 
     return entityComponentSignatures[entityId].test(componentId);
@@ -319,10 +320,10 @@ bool Registry::HasComponent(Entity entity) const
 template <typename TComponent>
 TComponent &Registry::GetComponent(Entity entity) const
 {
-    const auto componentId = Component<T>::GetId();
+    const auto componentId = Component<TComponent>::GetId();
     const auto entityId = entity.GetId();
 
-    std::shared_ptr<Pool<T>> componentPool = std::static_pointer_cast<Pool<T>>(componentPools[componentId]);
+    std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
 
     return componentPool->Get(entityId);
 }
@@ -330,25 +331,25 @@ TComponent &Registry::GetComponent(Entity entity) const
 template <typename TComponent, typename... TArgs>
 void Entity::AddComponent(TArgs &&...args)
 {
-    // TODO: Implement
+    registry->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
 }
 
 template <typename TComponent>
 void Entity::RemoveComponent()
 {
-    // TODO: Implement
+    registry->RemoveComponent<TComponent>(*this);
 }
 
 template <typename TComponent>
 bool Entity::HasComponent() const
 {
-    // TODO: Implement
+    return registry->HasComponent<TComponent>(*this);
 }
 
 template <typename TComponent>
 TComponent &Entity::GetComponent() const
 {
-    // TODO: Implement
+    return registry->GetComponent<TComponent>(*this);
 }
 
 #endif
