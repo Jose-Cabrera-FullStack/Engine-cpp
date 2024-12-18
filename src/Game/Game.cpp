@@ -111,7 +111,7 @@ void Game::Setup()
 
     // Create an entity
     Entity tank = registry->CreateEntity();
-    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(0.0, 0.0), 0.0);
+    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(1.0, 1.0), 0.0);
     tank.AddComponent<RigidBodyComponent>(glm::vec2(40.0, 0.0));
     tank.AddComponent<SpriteComponent>("tank-image", 32, 32);
 
