@@ -26,4 +26,5 @@ add_executable(gameengine ${SRC_FILES})
 target_link_libraries(gameengine SDL2_image ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${LUA_LIBRARIES})
 
 # Ensure the build directory exists
+
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/build)

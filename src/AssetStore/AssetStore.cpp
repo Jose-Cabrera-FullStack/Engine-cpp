@@ -4,18 +4,18 @@
 
 AssetStore::AssetStore()
 {
-    Logger::Log("AssetStore created");
+    Logger::Log("AssetStore constructor called!");
 }
 
 AssetStore::~AssetStore()
 {
     ClearAssets();
-    Logger::Log("AssetStore destroyed");
+    Logger::Log("AssetStore destructor called!");
 }
 
 void AssetStore::ClearAssets()
 {
-    for (auto &texture : textures)
+    for (auto texture : textures)
     {
         SDL_DestroyTexture(texture.second);
     }
@@ -28,10 +28,10 @@ void AssetStore::AddTexture(SDL_Renderer *renderer, const std::string &assetId, 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
-    // add the texture to the map
+    // Add the texture to the map
     textures.emplace(assetId, texture);
 
-    Logger::Log("Texture added to the asset store id=" + assetId + " path=" + filePath);
+    Logger::Log("New texture added to the Asset Store with id = " + assetId);
 }
 
 SDL_Texture *AssetStore::GetTexture(const std::string &assetId)
