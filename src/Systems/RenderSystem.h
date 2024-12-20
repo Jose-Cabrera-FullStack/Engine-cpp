@@ -6,6 +6,7 @@
 #include "../Components/SpriteComponent.h"
 #include "../AssetStore/AssetStore.h"
 #include <SDL.h>
+#include <algorithm>
 
 class RenderSystem : public System
 {
@@ -18,11 +19,33 @@ public:
 
     void Update(SDL_Renderer *renderer, std::unique_ptr<AssetStore> &assetStore)
     {
-        // Loop all entities that the system is interested in
+        // Create a vector with both Sprint and Transform components of all entities
+        struct RenderableEntity
+        {
+            SpriteComponent spriteComponent;
+            TransformComponent transformComponent;
+        };
+
+        std::vector<RenderableEntity> renderableEntities;
         for (auto entity : GetSystemEntities())
         {
-            const auto transform = entity.GetComponent<TransformComponent>();
-            const auto sprite = entity.GetComponent<SpriteComponent>();
+            RenderableEntity renderableEntity;
+            renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
+            renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+            renderableEntities.emplace_back(renderableEntity);
+        }
+
+        std::sort(
+            renderableEntities.begin(),
+            renderableEntities.end(),
+            [](const RenderableEntity &a, const RenderableEntity &b)
+            { return a.spriteComponent.zIndex < b.spriteComponent.zIndex; });
+
+        // Loop all entities that the system is interested in
+        for (auto entity : renderableEntities)
+        {
+            const auto transform = entity.transformComponent;
+            const auto sprite = entity.spriteComponent;
 
             // Set the source rectangle of our original sprite texture
             SDL_Rect srcRect = sprite.srcRect;
