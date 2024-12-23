@@ -6,13 +6,13 @@
 #include "../AssetStore/AssetStore.h"
 
 const int FPS = 30;
-const int MILISECONDS_PER_FRAME = 1000 / FPS;
+const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game
 {
 private:
     bool isRunning;
-    int millisecondsPreviousFrame = 0;
+    int millisecsPreviousFrame = 0;
     SDL_Window *window;
     SDL_Renderer *renderer;
 

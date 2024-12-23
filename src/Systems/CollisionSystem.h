@@ -2,8 +2,8 @@
 #define COLLISIONSYSTEM_H
 
 #include "../ECS/ECS.h"
-#include "../Components/TransformComponent.h"
 #include "../Components/BoxColliderComponent.h"
+#include "../Components/TransformComponent.h"
 
 class CollisionSystem : public System
 {
@@ -14,38 +14,60 @@ public:
         RequireComponent<BoxColliderComponent>();
     }
 
-    void Update() {
-        // AABB collision detection
-        //     // for (auto &entity : GetSystemEntities())
-        //     // {
-        //     //     auto &transform = entity.GetComponent<TransformComponent>();
-        //     //     auto &collider = entity.GetComponent<BoxColliderComponent>();
+    void Update()
+    {
+        auto entities = GetSystemEntities();
 
-        //     //     collider.offset.x = transform.position.x + collider.offset.x;
-        //     //     collider.offset.y = transform.position.y + collider.offset.y;
+        // Loop all the entities that the system is interested in
+        for (auto i = entities.begin(); i != entities.end(); i++)
+        {
+            Entity a = *i;
+            auto aTransform = a.GetComponent<TransformComponent>();
+            auto aCollider = a.GetComponent<BoxColliderComponent>();
 
-        //     //     for (auto &other : GetSystemEntities())
-        //     //     {
-        //     //         if (entity == other)
-        //     //         {
-        //     //             continue;
-        //     //         }
+            // Loop all the entities that still need to be checked (to the right of i)
+            for (auto j = i; j != entities.end(); j++)
+            {
+                Entity b = *j;
 
-        //     //         auto &otherTransform = other.GetComponent<TransformComponent>();
-        //     //         auto &otherCollider = other.GetComponent<BoxColliderComponent>();
+                // Bypass if we are trying to test the same entity
+                if (a == b)
+                {
+                    continue;
+                }
 
-        //     //         otherCollider.offset.x = otherTransform.position.x + otherCollider.offset.x;
-        //     //         otherCollider.offset.y = otherTransform.position.y + otherCollider.offset.y;
+                auto bTransform = b.GetComponent<TransformComponent>();
+                auto bCollider = b.GetComponent<BoxColliderComponent>();
 
-        //     //         if (collider.offset.x + collider.width >= otherCollider.offset.x &&
-        //     //             collider.offset.x <= otherCollider.offset.x + otherCollider.width &&
-        //     //             collider.offset.y + collider.height >= otherCollider.offset.y &&
-        //     //             collider.offset.y <= otherCollider.offset.y + otherCollider.height)
-        //     //         {
-        //     //             std::cout << "Collision detected!" << std::endl;
-        //     //         }
-        //     //     }
-        // }
-    };
+                // Perform the AABB collision check between entities a and b
+                bool collisionHappened = CheckAABBCollision(
+                    aTransform.position.x + aCollider.offset.x,
+                    aTransform.position.y + aCollider.offset.y,
+                    aCollider.width,
+                    aCollider.height,
+                    bTransform.position.x + bCollider.offset.x,
+                    bTransform.position.y + bCollider.offset.y,
+                    bCollider.width,
+                    bCollider.height);
+
+                if (collisionHappened)
+                {
+                    Logger::Log("Entity " + std::to_string(a.GetId()) + " is colliding with entity " + std::to_string(b.GetId()));
+
+                    // TODO: emit an event...
+                }
+            }
+        }
+    }
+
+    bool CheckAABBCollision(double aX, double aY, double aW, double aH, double bX, double bY, double bW, double bH)
+    {
+        return (
+            aX < bX + bW &&
+            aX + aW > bX &&
+            aY < bY + bH &&
+            aY + aH > bY);
+    }
 };
+
 #endif
