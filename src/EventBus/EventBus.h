@@ -5,7 +5,7 @@
 #include "Event.h"
 #include <map>
 #include <typeindex>
-#include <memory>
+#include <functional>
 #include <list>
 
 class IEventCallback
@@ -27,10 +27,10 @@ template <typename TOwner, typename TEvent>
 class EventCallback : public IEventCallback
 {
 private:
-    typedef void (TOwner::*CallBackFunction)(TEvent &);
+    typedef void (TOwner::*CallbackFunction)(TEvent &);
 
     TOwner *ownerInstance;
-    CallBackFunction callbackFunction;
+    CallbackFunction callbackFunction;
 
     virtual void Call(Event &event) override
     {
@@ -66,16 +66,21 @@ public:
         Logger::Log("EventBus destructed.");
     }
 
+    void Reset()
+    {
+        subscribers.clear();
+    }
+
     //////////////////////////////////////////////////////////////////////////
     // Subscribe to an event type
     // In our implementation, a listener subscribes to an event type
     // Example: eventBust -> SubscribeToEvent<CollisionEvent>(this, &Game::OnCollision);
     //////////////////////////////////////////////////////////////////////////
 
-    template <typename TOwner, typename TEvent>
+    template <typename TEvent, typename TOwner>
     void SubscribeToEvent(TOwner *ownerInstance, void (TOwner::*callbackFunction)(TEvent &))
     {
-        if (!subscribers[typeid(TEvent).get()])
+        if (!subscribers[typeid(TEvent)].get())
         {
             subscribers[typeid(TEvent)] = std::make_unique<HandlerList>();
         }
@@ -92,12 +97,12 @@ public:
     //////////////////////////////////////////////////////////////////////////
 
     template <typename TEvent, typename... TArgs>
-    void EminitEvent(TArgs &&...args)
+    void EmitEvent(TArgs &&...args)
     {
         auto handlers = subscribers[typeid(TEvent)].get();
         if (handlers)
         {
-            for (auto it = handlers.begin(); it != handlers.end(); it++)
+            for (auto it = handlers->begin(); it != handlers->end(); it++)
             {
                 auto handler = it->get();
                 TEvent event(std::forward<TArgs>(args)...);
