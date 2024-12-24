@@ -1,5 +1,5 @@
-#ifndef COLISSIONEVENT_H
-#define COLISSIONEVENT_H
+#ifndef COLLISSIONEVENT_H
+#define COLLISSIONEVENT_H
 
 #include "../ECS/ECS.h"
 #include "../EventBus/EventBus.h"
