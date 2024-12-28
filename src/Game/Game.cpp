@@ -100,7 +100,7 @@ void Game::ProcessInput()
             {
                 isRunning = false;
             }
-            if (sdlEvent.key.keysym.sym == SDLK_d)
+            if (sdlEvent.key.keysym.sym == SDLK_e)
             {
                 isDebug = !isDebug;
             }
@@ -167,6 +167,7 @@ void Game::LoadLevel(int level)
     chopper.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1);
     chopper.AddComponent<AnimationComponent>(2, 15, true);
+    chopper.AddComponent<ProjectileEmitterComponent>(glm::vec2(150.0, 150.0), 0, 10000, 0, true);
     chopper.AddComponent<BoxColliderComponent>(32, 32);
     chopper.AddComponent<KeyboardControlledComponent>(
         glm::vec2(0.0, -200.0),
@@ -225,6 +226,7 @@ void Game::Update()
     // Perform the susbcription to events
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
