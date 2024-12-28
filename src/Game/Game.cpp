@@ -19,6 +19,7 @@
 #include "../Systems/DamageSystem.h"
 #include "../Systems/ProjectileEmitSystem.h"
 #include "../Systems/KeyboardControlSystem.h"
+#include "../Systems/ProjectileLifecycleSystem.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm.hpp>
@@ -121,6 +122,7 @@ void Game::LoadLevel(int level)
     registry->AddSystem<DamageSystem>();
     registry->AddSystem<ProjectileEmitSystem>();
     registry->AddSystem<KeyboardControlSystem>();
+    registry->AddSystem<ProjectileLifecycleSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-panther-right.png");
@@ -185,7 +187,7 @@ void Game::LoadLevel(int level)
     tank.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1);
     tank.AddComponent<BoxColliderComponent>(32, 32);
-    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0, 0.0), 5000, 10000, 0, false);
+    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0, 0.0), 5000, 3000, 0, false);
     tank.AddComponent<HealthComponent>(100);
 
     Entity truck = registry->CreateEntity();
@@ -233,6 +235,7 @@ void Game::Update()
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<CollisionSystem>().Update(eventBus);
+    registry->GetSystem<ProjectileLifecycleSystem>().Update();
 }
 
 void Game::Render()
