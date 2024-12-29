@@ -169,7 +169,7 @@ std::vector<Entity> Registry::GetEntitiesByGroup(const std::string &group) const
     return std::vector<Entity>(setOfEntities.begin(), setOfEntities.end());
 }
 
-void Registry::RemoveEntityFromGroup(Entity entity)
+void Registry::RemoveEntityGroup(Entity entity)
 {
     auto groupedEntity = groupPerEntity.find(entity.GetId());
     if (groupedEntity != groupPerEntity.end())
@@ -205,7 +205,7 @@ void Registry::Update()
 
         // Remove the entity from the tag and group maps
         RemoveEntityTag(entity);
-        RemoveEntityFromGroup(entity);
+        RemoveEntityGroup(entity);
     }
     entitiesToBeKilled.clear();
 }

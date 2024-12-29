@@ -202,15 +202,15 @@ private:
     std::set<Entity> entitiesToBeAdded;
     std::set<Entity> entitiesToBeKilled;
 
-    // Entitiy tags (one tag name per entity)
+    // Entity tags (one tag name per entity)
     std::unordered_map<std::string, Entity> entityPerTag;
     std::unordered_map<int, std::string> tagPerEntity;
 
-    // Entitiy groups (a set of entities per group name)
+    // Entity groups (a set of entities per group name)
     std::unordered_map<std::string, std::set<Entity>> entitiesPerGroup;
     std::unordered_map<int, std::string> groupPerEntity;
 
-    // List of free entity ids that can be reused.
+    // List of free entity ids that were previously removed
     std::deque<int> freeIds;
 
 public:
@@ -235,7 +235,7 @@ public:
     void GroupEntity(Entity entity, const std::string &group);
     bool EntityBelongsToGroup(Entity entity, const std::string &group) const;
     std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;
-    void RemoveEntityFromGroup(Entity entity);
+    void RemoveEntityGroup(Entity entity);
 
     // Component management
     template <typename TComponent, typename... TAgrs>
