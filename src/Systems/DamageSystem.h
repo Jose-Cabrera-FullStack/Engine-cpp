@@ -25,21 +25,22 @@ public:
     {
         Entity a = event.a;
         Entity b = event.b;
-        Logger::Log("DamageSystem: Collision between entity " + std::to_string(a.GetId()) + " and entity " + std::to_string(b.GetId()));
 
-        if (a.BelongsToGroup("projectiles") && b.BelongsToGroup("player"))
+        if (a.BelongsToGroup("projectiles") && b.HasTag("player"))
         {
             OnProjectileHitsPlayer(a, b); // a is the projectile, b is the player
         }
-        if (b.BelongsToGroup("projectiles") && a.BelongsToGroup("player"))
+        if (b.BelongsToGroup("projectiles") && a.HasTag("player"))
         {
             OnProjectileHitsPlayer(b, a); // b is the projectile, a is the player
         }
         if (a.BelongsToGroup("projectiles") && b.BelongsToGroup("enemies"))
         {
+            OnProjectileHitsEnemy(a, b); // a is the projectile, b is the enemy
         }
         if (b.BelongsToGroup("projectiles") && a.BelongsToGroup("enemies"))
         {
+            OnProjectileHitsEnemy(b, a); // b is the projectile, a is the enemy
         }
     }
 
@@ -59,6 +60,29 @@ public:
             if (health.healthPercentage <= 0)
             {
                 player.Kill();
+            }
+
+            // Kill the projectile
+            projectile.Kill();
+        }
+    }
+
+    void OnProjectileHitsEnemy(Entity projectile, Entity enemy)
+    {
+        const auto projectileComponent = projectile.GetComponent<ProjectileComponent>();
+
+        if (projectileComponent.isFriendly)
+        {
+            // Reduce the health of the enemy by the projectile hitPercentDamage
+            auto &health = enemy.GetComponent<HealthComponent>();
+
+            // Subtract the health of the enemy
+            health.healthPercentage -= projectileComponent.hitPercentDamage;
+
+            // Kills the enemy when health reaches zero
+            if (health.healthPercentage <= 0)
+            {
+                enemy.Kill();
             }
 
             // Kill the projectile
