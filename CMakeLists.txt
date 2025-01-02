@@ -24,6 +24,7 @@ add_executable(gameengine ${SRC_FILES})
 
 # Link libraries
 target_link_libraries(gameengine SDL2_image ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries(gameengine SDL2_ttf::SDL2_ttf SDL2::SDL2)
 
 # Ensure the build directory exists
 

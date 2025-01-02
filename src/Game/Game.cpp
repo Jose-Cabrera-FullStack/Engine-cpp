@@ -55,6 +55,13 @@ void Game::Initialize()
         Logger::Err("Error initializing SDL.");
         return;
     }
+
+    if (TTF_Init() != 0)
+    {
+        Logger::Err("Error initializing SDL TTF.");
+        return;
+    }
+
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
     windowWidth = 800;
@@ -135,7 +142,8 @@ void Game::LoadLevel(int level)
     assetStore->AddTexture(renderer, "radar-image", "./assets/images/radar.png");
     assetStore->AddTexture(renderer, "tilemap-image", "./assets/tilemaps/jungle.png");
     assetStore->AddTexture(renderer, "bullet-image", "./assets/images/bullet.png");
-    assetStore->AddFont("charrio-font", "./assets/fonts/charrio.ttf", 14);
+    assetStore->AddFont("charriot-font", "./assets/fonts/charriot.ttf", 14);
+    Logger::Log("Prueba");
 
     // Load the tilemap
     int tileSize = 32;
@@ -206,7 +214,7 @@ void Game::LoadLevel(int level)
 
     Entity label = registry->CreateEntity();
     SDL_Color white = {255, 255, 255, 255};
-    label.AddComponent<TextLabelComponent>(glm::vec2(0, 0), "Hello, World!", "charrio-font", white, true);
+    label.AddComponent<TextLabelComponent>(glm::vec2(0, 0), "Hello, World!", "charriot-font", white, true);
 }
 
 void Game::Setup()

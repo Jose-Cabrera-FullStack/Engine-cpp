@@ -17,7 +17,7 @@ struct TextLabelComponent
     TextLabelComponent(
         glm::vec2 position = glm::vec2(0, 0),
         std::string text = "",
-        std::string assetId = "charrio-font",
+        std::string assetId = "charriot-font",
         SDL_Color color = {255, 255, 255, 255},
         bool isFixed = true)
     {
