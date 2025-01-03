@@ -41,6 +41,8 @@ public:
                 labelHeight};
 
             SDL_RenderCopy(renderer, texture, NULL, &destRect);
+
+            SDL_DestroyTexture(texture);
         }
     }
 };
