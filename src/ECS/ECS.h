@@ -167,7 +167,7 @@ public:
             int index = size;
             entityIdToIndex.emplace(entityId, index);
             indexToEntityId.emplace(index, entityId);
-            if (index >= data.capacity())
+            if (index >= static_cast<int>(data.capacity()))
             {
                 // If necessary, we resize by always doubling the current capacity
                 data.resize(size * 2);
@@ -349,7 +349,7 @@ void Registry::AddComponent(Entity entity, TArgs &&...args)
     const auto componentId = Component<TComponent>::GetId();
     const auto entityId = entity.GetId();
 
-    if (componentId >= componentPools.size())
+    if (componentId >= static_cast<int>(componentPools.size()))
     {
         componentPools.resize(componentId + 1, nullptr);
     }
