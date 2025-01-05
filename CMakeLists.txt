@@ -14,18 +14,15 @@ find_package(SDL2_mixer REQUIRED)
 find_package(Lua REQUIRED)
 
 # Include directories
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/glm)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/glm ${CMAKE_SOURCE_DIR}/lib/imgui ${CMAKE_SOURCE_DIR}/lib/imgui_sdl)
 
 # Source files
 file(GLOB SRC_FILES src/*.cpp src/Game/*.cpp src/Logger/*.cpp src/ECS/*.cpp src/AssetStore/*.cpp)
+file(GLOB IMGUI_SRC_FILES lib/imgui/*.cpp)
+file(GLOB IMGUI_SDL_SRC_FILES lib/imgui_sdl/*.cpp)
 
 # Add executable
-add_executable(gameengine ${SRC_FILES})
+add_executable(gameengine ${SRC_FILES} ${IMGUI_SRC_FILES} ${IMGUI_SDL_SRC_FILES})
 
 # Link libraries
-target_link_libraries(gameengine SDL2_image ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${LUA_LIBRARIES})
-target_link_libraries(gameengine SDL2_ttf::SDL2_ttf SDL2::SDL2)
-
-# Ensure the build directory exists
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+target_link_libraries(gameengine SDL2_ttf::SDL2_ttf SDL2::SDL2 SDL2_image ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${LUA_LIBRARIES})
