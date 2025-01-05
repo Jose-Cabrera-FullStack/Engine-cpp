@@ -14,7 +14,7 @@ find_package(SDL2_mixer REQUIRED)
 find_package(Lua REQUIRED)
 
 # Include directories
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/glm ${CMAKE_SOURCE_DIR}/lib/imgui ${CMAKE_SOURCE_DIR}/lib/imgui_sdl)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/lib/glm ${CMAKE_SOURCE_DIR}/lib/imgui)
 
 # Source files
 file(GLOB SRC_FILES src/*.cpp src/Game/*.cpp src/Logger/*.cpp src/ECS/*.cpp src/AssetStore/*.cpp)
